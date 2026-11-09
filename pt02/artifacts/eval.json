@@ -1,0 +1,38 @@
+{
+  "words": 2000,
+  "bigram": {
+    "tokens": 1999,
+    "nats_total": 16308.247168449458,
+    "nats_per_word": 8.15412358422473,
+    "ppl_per_word": 3477.6900868304156,
+    "alpha": 0.01,
+    "vocab_size": 45310,
+    "observed_pairs": 236820,
+    "unknown_target_words": 126
+  },
+  "tiny": {
+    "tokens": 3664,
+    "nats_total": 15047.309086294961,
+    "nats_per_word": 7.52365454314748,
+    "ppl_per_word": 1851.32067756722
+  },
+  "scored_words": 1999,
+  "context_word": "это",
+  "context_bpe_tokens": 1,
+  "text_sha256": "6e72ce5046d0590e8ef50e7104a3ddf6baa1829286fe96c4af8b449857db5e86",
+  "policy": {
+    "text": "First word_limit words of the held-out split; split by words before BPE",
+    "targets": "Both models score words 2..word_limit; the complete first word is context only",
+    "denominator": "word_limit, including the initial context word, as in the assignment example",
+    "tiny_context": "Up to 128 previous true tokens; each target scored once",
+    "probabilities": "Original model probabilities; no temperature or top-p filtering",
+    "bigram_unknowns": "Unknown words are mapped to the existing pt01 <UNK> token"
+  },
+  "known_target_words_only": {
+    "scored_words": 1873,
+    "bigram_nats_per_scored_word": 7.90979129548504,
+    "tiny_nats_per_scored_word": 6.761796203648582
+  },
+  "checkpoint_sha256": "1849984b587915fcbd46529d0850c96efe4cb572112f33bd4979afa34f704d3e",
+  "bpe_sha256": "d7f95a7aa455d7f467f6a8e0abb11f704395a688abb12d34a18fda33f2b126f9"
+}

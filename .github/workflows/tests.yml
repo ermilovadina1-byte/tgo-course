@@ -56,6 +56,10 @@ jobs:
           else
             labs=$(git diff --name-only "$BEFORE" "$SHA" | grep -oE '^(lab|pt)[0-9]{2}/' | tr -d '/' | sort -u | tr '\n' ' ')
           fi
+          # pt02 использует код и сохраненный BPE из pt01.
+          if [[ " $labs " == *" pt01 "* && " $labs " != *" pt02 "* ]]; then
+            labs="$labs pt02"
+          fi
           echo "Затронуты: ${labs:-нет}"
           echo "labs=$labs" >> "$GITHUB_OUTPUT"
 
@@ -124,8 +128,8 @@ jobs:
 
       - name: Кэш моделей
         id: hf-cache
-        # pt01 считает частоты и BPE, готовые модели Hugging Face не использует.
-        if: matrix.lab != 'pt01'
+        # Обе заочные работы используют свои модели без загрузок Hugging Face.
+        if: matrix.lab != 'pt01' && matrix.lab != 'pt02'
         uses: actions/cache/restore@v5
         with:
           path: ~/.cache/huggingface
@@ -136,7 +140,7 @@ jobs:
 
       # Кэш сохраняется до тестов: пока тесты красные, модели не качаются заново на каждый пуш
       - name: Сохранить кэш моделей
-        if: matrix.lab != 'pt01' && steps.hf-cache.outputs.cache-hit != 'true'
+        if: matrix.lab != 'pt01' && matrix.lab != 'pt02' && steps.hf-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v5
         with:
           path: ~/.cache/huggingface
@@ -146,6 +150,6 @@ jobs:
         # настройки pytest тоже из курса, чтобы pytest.ini и conftest.py копии не меняли состав тестов
         run: pytest -c "$RUNNER_TEMP/course/pytest.ini" --rootdir . --noconftest tests/test_${{ matrix.lab }}.py -v
 
-      - name: Дополнительные тесты pt01
-        if: matrix.lab == 'pt01'
-        run: python -m unittest discover -s pt01/tests -v
+      - name: Дополнительные тесты заочных работ
+        if: matrix.lab == 'pt01' || matrix.lab == 'pt02'
+        run: python -m unittest discover -s ${{ matrix.lab }}/tests -v
