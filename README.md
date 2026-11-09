@@ -28,4 +28,4 @@ python3 -m venv .venv
 
 Workflow `.github/workflows/tests.yml` запускается при push или вручную через Actions. Он берет тесты и настройки pytest из актуального репозитория курса, выполняет `run.py --fast` и официальные тесты. Дополнительно для pt01 выполняются собственные тесты. Заглушка pt02 пропускается.
 
-Временные артефакты быстрого запуска в CI остаются на runner и не заменяют полные результаты в репозитории. Актуальное состояние запусков видно в [GitHub Actions](https://github.com/ermilovadina1-byte/tgo-course/actions/workflows/tests.yml). Локальная проверка не равна зеленому CI. Работа не отмечена как сданная.
+Временные артефакты быстрого запуска в CI остаются на runner и не заменяют полные результаты в репозитории. Состояние запусков доступно в [GitHub Actions](https://github.com/ermilovadina1-byte/tgo-course/actions/workflows/tests.yml).
