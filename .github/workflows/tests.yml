@@ -124,7 +124,9 @@ jobs:
 
       - name: Кэш моделей
         id: hf-cache
-        uses: actions/cache/restore@v4
+        # pt01 считает частоты и BPE, готовые модели Hugging Face не использует.
+        if: matrix.lab != 'pt01'
+        uses: actions/cache/restore@v5
         with:
           path: ~/.cache/huggingface
           key: hf-${{ matrix.lab }}-${{ hashFiles('requirements.txt') }}
@@ -134,8 +136,8 @@ jobs:
 
       # Кэш сохраняется до тестов: пока тесты красные, модели не качаются заново на каждый пуш
       - name: Сохранить кэш моделей
-        if: steps.hf-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        if: matrix.lab != 'pt01' && steps.hf-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
         with:
           path: ~/.cache/huggingface
           key: hf-${{ matrix.lab }}-${{ hashFiles('requirements.txt') }}
