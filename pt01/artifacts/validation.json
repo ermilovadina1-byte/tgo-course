@@ -1,0 +1,63 @@
+{
+  "bpe_roundtrip_word_types": 48117,
+  "bpe_recomputed_tokens": 836977,
+  "fast_merges_are_full_prefix": true,
+  "course_tests_sources": {
+    "tests/test_pt01.py": {
+      "url": "https://raw.githubusercontent.com/pmenshih/tgo-course/main/tests/test_pt01.py",
+      "sha256": "d0803175347a69c561e82bacbaea15b333b23f4e3618ad599db4d846ade188de"
+    },
+    "tests/data/pt01/top20.json": {
+      "url": "https://raw.githubusercontent.com/pmenshih/tgo-course/main/tests/data/pt01/top20.json",
+      "sha256": "af6e9de133b3d454a9a59c7b17421511d502cf106e365aea50ff3206d3ee3b3f"
+    }
+  },
+  "full_bpe_sha256": "d7f95a7aa455d7f467f6a8e0abb11f704395a688abb12d34a18fda33f2b126f9",
+  "runs": {
+    "fast": {
+      "merges": 200,
+      "seconds": 5.81,
+      "course_tests_passed": 8,
+      "stats": {
+        "chars": 2245342,
+        "words": 433082,
+        "tokens_bpe": 1363489,
+        "tokens_per_word": 3.1483391136089702,
+        "compression_vs_chars": 1.6467620934235627
+      }
+    },
+    "full": {
+      "merges": 1500,
+      "seconds": 14.03,
+      "stats": {
+        "chars": 2245342,
+        "words": 433082,
+        "tokens_bpe": 836977,
+        "tokens_per_word": 1.9326062962672197,
+        "compression_vs_chars": 2.6826806471384517
+      },
+      "course_tests_passed": 8
+    }
+  },
+  "local_tests_passed": 21,
+  "github_ci_status": "See github_actions_url for current remote run status; below are local preflight results.",
+  "repository_preflight": {
+    "template": "https://github.com/pmenshih/tgo-course",
+    "template_commit": "3e16f3beef2686f099c5a61075fa9e49ef35cdb6",
+    "actionlint": "1.7.12: passed",
+    "clean_copy_download_and_fast_run": "passed",
+    "course_tests_passed": 8,
+    "local_tests_passed": 21,
+    "local_python": "3.12.14",
+    "local_platform": "macOS",
+    "github_runner": "not_run; configured ubuntu-latest, Python 3.11",
+    "job_selection_push": [
+      "pt01"
+    ],
+    "job_selection_manual_pt01_pt02": [
+      "pt01"
+    ],
+    "full_bpe_merges_kept": 1500
+  },
+  "github_actions_url": "https://github.com/ermilovadina1-byte/tgo-course/actions/workflows/tests.yml"
+}

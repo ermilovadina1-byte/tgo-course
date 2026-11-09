@@ -1,0 +1,6 @@
+corpus.txt
+corpus.txt.part
+__pycache__/
+*.pyc
+*.pt
+.venv/

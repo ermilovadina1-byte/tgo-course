@@ -9,6 +9,9 @@ on:
         required: false
         default: ""
 
+permissions:
+  contents: read
+
 concurrency:
   group: tests-${{ github.ref }}
   cancel-in-progress: true
@@ -47,8 +50,8 @@ jobs:
           elif [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
             # первый пуш в ветку или история переписана: сравнивать не с чем
             labs="$all"
-          elif git diff --name-only "$BEFORE" "$SHA" | grep -qx 'requirements.txt'; then
-            # сменилось окружение: перепроверить все начатые работы
+          elif git diff --name-only "$BEFORE" "$SHA" | grep -Eq '^(requirements\.txt|\.github/workflows/tests\.yml)$'; then
+            # сменилось окружение или CI: перепроверить все начатые работы
             labs="$all"
           else
             labs=$(git diff --name-only "$BEFORE" "$SHA" | grep -oE '^(lab|pt)[0-9]{2}/' | tr -d '/' | sort -u | tr '\n' ' ')
@@ -140,3 +143,7 @@ jobs:
       - name: Тесты
         # настройки pytest тоже из курса, чтобы pytest.ini и conftest.py копии не меняли состав тестов
         run: pytest -c "$RUNNER_TEMP/course/pytest.ini" --rootdir . --noconftest tests/test_${{ matrix.lab }}.py -v
+
+      - name: Дополнительные тесты pt01
+        if: matrix.lab == 'pt01'
+        run: python -m unittest discover -s pt01/tests -v

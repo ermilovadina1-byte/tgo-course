@@ -25,3 +25,7 @@ part-time/lectures/*/*.pptx
 
 # инструменты лектора и ассистента, см. tools/README.md
 tools/
+
+# Локальные кеши проверок
+.pytest_cache/
+*.pyc
