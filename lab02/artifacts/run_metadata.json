@@ -1,0 +1,33 @@
+{
+  "mode": "full",
+  "device": "cuda",
+  "dtype": "torch.float16",
+  "gpu": "Tesla T4",
+  "torch": "2.14.1+cu130",
+  "transformers": "4.57.1",
+  "python": "3.13.16",
+  "elapsed_seconds": 62.94590426100001,
+  "model_revisions": {
+    "Qwen/Qwen3-0.6B-Base": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+    "intfloat/multilingual-e5-small": "614241f622f53c4eeff9890bdc4f31cfecc418b3"
+  },
+  "corpus_sha256": "5f088a66e1f3992153555fdf0361652f759697e429bd698fb2900fdf26df9836",
+  "e5_truncated_inputs": 0,
+  "source_sha256": {
+    "lab02/run.py": "b7e09fedbc26fbae0ded4c85d0062dbaac09568b4f1fea5893781d45477bf98d",
+    "lab02/queries.json": "130156b3e18390b0c1dba161764099872bc2847c4bd5f020f7704d04fbdedb33",
+    "pt01/run.py": "f4a88e10fe73f7e262ffa588b339ffe743e1f99edca975e81ae82b8067c7a10a"
+  },
+  "artifact_sha256": {
+    "attention_map.json": "9ae588a40a424da909cf297f9ceabc531457521e3a9f8dc2f0970585b0208301",
+    "attention_map.png": "536681ea6750ee3194f1305d40a51a99193b6a45b9eb231855245d5f68333184",
+    "bpe.json": "d7f95a7aa455d7f467f6a8e0abb11f704395a688abb12d34a18fda33f2b126f9",
+    "dilution.csv": "7f0eb2e4a8faa8e106b96441ad82741dcf16daad281ffd5a76600d12aec6a577",
+    "dilution_evidence.json": "ebdb94678ea84ed58487d1a27e40b321bc4e2abee818d12174cc86e6b7ce69ea",
+    "paragraphs.json": "b532134e5102205dbd565600e15cec803ddc609667901b063b8f89d2720acdbf",
+    "retrieval_vectors.npz": "49b5a00864da26c56ae0f86b57bb92dd4909244f38e3431728250352260b8bf7",
+    "search.json": "60608035ba76006f1523ad9891c1e19e4def19ce2d6cadc7bffadb1d20ac06a5",
+    "search_and_dilution.png": "afa4d1cd1c596395d3ad2fcca134f0283703847058976b408a95574caf4fef29",
+    "tokens_per_word.json": "5c140a8612e8a58f565607f9b390429e829cf968ec89742e3b7f0fb600d561e2"
+  }
+}

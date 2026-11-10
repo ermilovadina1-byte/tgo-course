@@ -153,6 +153,10 @@ jobs:
           pip install -r "$RUNNER_TEMP/course/requirements.txt"
           pip install -r requirements.txt
 
+      - name: Версии библиотек lab02
+        if: matrix.lab == 'lab02'
+        run: pip install -r lab02/requirements.txt
+
       - name: Версии библиотек lab04
         if: matrix.lab == 'lab04'
         run: pip install -r lab04/requirements-colab.txt
@@ -175,6 +179,13 @@ jobs:
         with:
           path: ~/.cache/huggingface
           key: hf-${{ matrix.lab }}-${{ hashFiles('requirements.txt', 'lab04/requirements-colab.txt') }}
+
+      - name: Полные результаты lab02 из Colab
+        if: matrix.lab == 'lab02'
+        run: |
+          python -c "import json; assert json.load(open('lab02/artifacts/run_metadata.json'))['mode'] == 'full'"
+          pytest -c "$RUNNER_TEMP/course/pytest.ini" --rootdir . --noconftest tests/test_lab02.py -v
+          python -m pytest lab02/tests -q
 
       - name: Запуск работы
         run: python ${{ matrix.lab }}/run.py --fast
@@ -202,3 +213,7 @@ jobs:
       - name: Дополнительные тесты lab03
         if: matrix.lab == 'lab03'
         run: python -m pytest lab03/tests -q
+
+      - name: Дополнительные тесты lab02
+        if: matrix.lab == 'lab02'
+        run: python -m pytest lab02/tests -q

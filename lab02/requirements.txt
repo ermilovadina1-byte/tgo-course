@@ -1,0 +1,5 @@
+transformers==4.57.1
+torch>=2.6
+numpy
+matplotlib
+sentencepiece
