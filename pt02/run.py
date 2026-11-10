@@ -23,19 +23,21 @@ from pt02.model import ModelConfig, TinyTransformer
 from pt02.training import evaluate_loss, plot_curve, sample_text, sample_windows, write_json
 
 
-def main():
+def main(argv=None, *, home=HERE, default_bpe=None, include_evaluation=True):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--fast", action="store_true", help="200 шагов вместо 2000")
-    parser.add_argument("--bpe", type=Path, default=HERE.parent / "pt01/artifacts/bpe.json")
-    parser.add_argument("--artifacts", type=Path, default=HERE / "artifacts")
-    parser.add_argument("--checkpoint", type=Path, default=HERE / "model.pt")
+    parser.add_argument("--bpe", type=Path, default=default_bpe or HERE.parent / "pt01/artifacts/bpe.json")
+    parser.add_argument("--artifacts", type=Path, default=home / "artifacts")
+    parser.add_argument("--checkpoint", type=Path, default=home / "model.pt")
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--generate-only", action="store_true", help="загрузить обученные веса и сравнить генерацию")
     mode.add_argument("--evaluate-only", action="store_true", help="загрузить обученные веса и сравнить с биграммой")
     parser.add_argument("--steps", type=int, help="число шагов для отдельной проверки запуска")
     parser.add_argument("--threads", type=int, default=4)
     parser.add_argument("--seed", type=int, default=42)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    if args.evaluate_only and not include_evaluation:
+        parser.error("Сравнение с биграммой запускается через pt02/run.py")
     steps = args.steps if args.steps is not None else (200 if args.fast else 2000)
     if steps < 1 or args.threads < 1:
         parser.error("Число шагов и потоков должно быть положительным")
@@ -187,10 +189,12 @@ def main():
     write_json(artifacts / "tiny_config.json", metadata)
     plot_curve(rows, artifacts / "train_curve.png")
     save_generation(model, tokenizer)
-    save_evaluation(model, tokenizer, train_words, val_words)
+    if include_evaluation:
+        save_evaluation(model, tokenizer, train_words, val_words)
     print(f"Обучение завершено за {metadata['train_minutes']:.2f} мин; "
           f"val {rows[0]['val_loss']:.4f} -> {rows[-1]['val_loss']:.4f}; "
           f"exp(val)={math.exp(rows[-1]['val_loss']):.2f}", flush=True)
+    return artifacts
 
 
 if __name__ == "__main__":

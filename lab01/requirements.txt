@@ -1,0 +1,6 @@
+nbformat
+nbconvert
+nbclient
+ipykernel
+matplotlib
+pytest

@@ -21,6 +21,26 @@ env:
   HF_HOME: /home/runner/.cache/huggingface
 
 jobs:
+  # У lab01 нет тестов преподавателя. Проверяем notebook и результаты своим тестом.
+  lab01:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: lab01/requirements.txt
+      - name: Зависимости ноутбука
+        run: pip install -r lab01/requirements.txt
+      - name: Сохранённые результаты lab01
+        run: python -m pytest lab01/tests -q
+      - name: Ноутбук с нуля
+        run: python -m nbconvert --execute --to notebook --inplace --ExecutePreprocessor.timeout=180 lab01/lab01.ipynb
+      - name: Проверка пересчитанных результатов
+        run: python -m pytest lab01/tests -q
+
   # Какие работы проверять: затронутые пушем, не заглушки и с тестами в репозитории курса.
   # labNN это очный трек, ptNN заочный; правила для них одни.
   select:
@@ -60,6 +80,12 @@ jobs:
           # pt02 использует код и сохраненный BPE из pt01.
           if [[ " $labs " == *" pt01 "* && " $labs " != *" pt02 "* ]]; then
             labs="$labs pt02"
+          fi
+          # lab03 использует pt02 и BPE из lab02; pt02 также использует pt01.
+          if [[ " $labs " == *" pt02 "* || " $labs " == *" lab02 "* ]]; then
+            if [[ " $labs " != *" lab03 "* ]]; then
+              labs="$labs lab03"
+            fi
           fi
           echo "Затронуты: ${labs:-нет}"
           echo "labs=$labs" >> "$GITHUB_OUTPUT"
@@ -135,10 +161,16 @@ jobs:
         if: matrix.lab == 'lab04'
         run: pytest -c "$RUNNER_TEMP/course/pytest.ini" --rootdir . --noconftest tests/test_lab04.py -v
 
+      - name: Полные результаты lab03
+        if: matrix.lab == 'lab03'
+        run: |
+          pytest -c "$RUNNER_TEMP/course/pytest.ini" --rootdir . --noconftest tests/test_lab03.py -v
+          python -m pytest lab03/tests -q
+
       - name: Кэш моделей
         id: hf-cache
         # Обе заочные работы используют свои модели без загрузок Hugging Face.
-        if: matrix.lab != 'pt01' && matrix.lab != 'pt02'
+        if: matrix.lab != 'pt01' && matrix.lab != 'pt02' && matrix.lab != 'lab03'
         uses: actions/cache/restore@v5
         with:
           path: ~/.cache/huggingface
@@ -149,7 +181,7 @@ jobs:
 
       # Кэш сохраняется до тестов: пока тесты красные, модели не качаются заново на каждый пуш
       - name: Сохранить кэш моделей
-        if: matrix.lab != 'pt01' && matrix.lab != 'pt02' && steps.hf-cache.outputs.cache-hit != 'true'
+        if: matrix.lab != 'pt01' && matrix.lab != 'pt02' && matrix.lab != 'lab03' && steps.hf-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v5
         with:
           path: ~/.cache/huggingface
@@ -166,3 +198,7 @@ jobs:
       - name: Дополнительные тесты lab04
         if: matrix.lab == 'lab04'
         run: python -m unittest discover -s lab04/tests -v
+
+      - name: Дополнительные тесты lab03
+        if: matrix.lab == 'lab03'
+        run: python -m pytest lab03/tests -q

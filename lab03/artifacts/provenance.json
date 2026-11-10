@@ -1,0 +1,17 @@
+{
+  "origin": "reused_completed_pt02_run",
+  "source_commit": "03752ac2ccd2b38db2d96503c78ae8ec2ced8c21",
+  "source_directory": "pt02/artifacts",
+  "note": "Полный ранее выполненный прогон, 2000 шагов. При оформлении lab03 новое обучение не запускалось.",
+  "files_sha256": {
+    "tiny_config.json": "9d4e0a1415166bfcf8e87264d05c794b2306558605dc74cf6a95f61182b15d35",
+    "train_curve.csv": "c17b3d3acafa7e66694562097d7e32dfe50b567b7d34334ae560778c387ac1bb",
+    "samples.json": "b8b8ad461d3b92fb2131fba257ec895167913b672d13cd7961f036b8d0095ddc",
+    "generation.json": "dae2c056edce60a908d88e5e66ee018c6d34b45b27c2ffece947d274ca34a55d",
+    "train_curve.png": "701db0ddd954906d533790a303bb351126c572de73502f233e67ea437fa6c786",
+    "generation_first_step.json": "96daf58193fa34bd0ecaf5bdade5724aa9114e158cf3a2e113fb770ef1d1a8ad"
+  },
+  "bpe_source": "pt01/artifacts/bpe.json",
+  "bpe_destination": "lab02/artifacts/bpe.json",
+  "bpe_sha256": "d7f95a7aa455d7f467f6a8e0abb11f704395a688abb12d34a18fda33f2b126f9"
+}
