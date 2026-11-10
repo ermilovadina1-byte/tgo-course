@@ -29,3 +29,17 @@ tools/
 # Локальные кеши проверок
 .pytest_cache/
 *.pyc
+
+# Локальные данные и кеши дополнительной работы
+lab04/.cache/
+
+# Промежуточные учебные прогоны и снимки экрана остаются локально
+lab04/artifacts/baseline/
+lab04/artifacts/*.jpg
+lab04/artifacts/*walkthrough.json
+lab04/artifacts/adapter_preview.json
+lab04/artifacts/training_example.json
+lab04/artifacts/colab_preflight.json
+lab04/artifacts/colab_result_check.json
+lab04/artifacts/colab_evaluation_check.json
+lab04/artifacts/progress.json

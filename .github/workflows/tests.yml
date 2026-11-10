@@ -18,6 +18,7 @@ concurrency:
 
 env:
   COURSE_REPO: https://github.com/pmenshih/tgo-course
+  HF_HOME: /home/runner/.cache/huggingface
 
 jobs:
   # Какие работы проверять: затронутые пушем, не заглушки и с тестами в репозитории курса.
@@ -126,6 +127,14 @@ jobs:
           pip install -r "$RUNNER_TEMP/course/requirements.txt"
           pip install -r requirements.txt
 
+      - name: Версии библиотек lab04
+        if: matrix.lab == 'lab04'
+        run: pip install -r lab04/requirements-colab.txt
+
+      - name: Полные результаты lab04 из Colab
+        if: matrix.lab == 'lab04'
+        run: pytest -c "$RUNNER_TEMP/course/pytest.ini" --rootdir . --noconftest tests/test_lab04.py -v
+
       - name: Кэш моделей
         id: hf-cache
         # Обе заочные работы используют свои модели без загрузок Hugging Face.
@@ -133,7 +142,7 @@ jobs:
         uses: actions/cache/restore@v5
         with:
           path: ~/.cache/huggingface
-          key: hf-${{ matrix.lab }}-${{ hashFiles('requirements.txt') }}
+          key: hf-${{ matrix.lab }}-${{ hashFiles('requirements.txt', 'lab04/requirements-colab.txt') }}
 
       - name: Запуск работы
         run: python ${{ matrix.lab }}/run.py --fast
@@ -144,7 +153,7 @@ jobs:
         uses: actions/cache/save@v5
         with:
           path: ~/.cache/huggingface
-          key: hf-${{ matrix.lab }}-${{ hashFiles('requirements.txt') }}
+          key: hf-${{ matrix.lab }}-${{ hashFiles('requirements.txt', 'lab04/requirements-colab.txt') }}
 
       - name: Тесты
         # настройки pytest тоже из курса, чтобы pytest.ini и conftest.py копии не меняли состав тестов
@@ -153,3 +162,7 @@ jobs:
       - name: Дополнительные тесты заочных работ
         if: matrix.lab == 'pt01' || matrix.lab == 'pt02'
         run: python -m unittest discover -s ${{ matrix.lab }}/tests -v
+
+      - name: Дополнительные тесты lab04
+        if: matrix.lab == 'lab04'
+        run: python -m unittest discover -s lab04/tests -v
