@@ -31,3 +31,24 @@ def test_lab03_uses_separate_paths():
     train.assert_called_once_with(["--fast"], home=ROOT / "lab03",
                                   default_bpe=ROOT / "lab02/artifacts/bpe.json",
                                   include_evaluation=False)
+
+
+def test_generate_only_returns_output_directory(tmp_path):
+    """Повторная генерация должна позволять обновить SHA256, без загрузки весов в тесте."""
+    from unittest.mock import MagicMock, patch
+    from pt02.run import main
+    bpe, checkpoint = tmp_path / "bpe.json", tmp_path / "model.pt"
+    bpe.write_text("{}")
+    checkpoint.write_bytes(b"test checkpoint")
+    saved = {"training": {"training_status": "completed",
+                          "bpe_sha256": hashlib.sha256(bpe.read_bytes()).hexdigest()},
+             "vocabulary": ["a"], "config": {}, "state_dict": {}}
+    tokenizer = MagicMock(vocabulary=["a"])
+    with patch("pt02.run.torch.load", return_value=saved), \
+         patch("pt02.run.BPETokens", return_value=tokenizer), \
+         patch("pt02.run.ModelConfig"), patch("pt02.run.TinyTransformer"), \
+         patch("pt02.run.compare_generation", return_value={"runs": []}):
+        output = main(["--generate-only", "--bpe", str(bpe), "--checkpoint", str(checkpoint)],
+                      home=tmp_path, include_evaluation=False)
+    assert output == tmp_path / "artifacts"
+    assert (output / "generation.json").is_file()

@@ -90,7 +90,7 @@ def main(argv=None, *, home=HERE, default_bpe=None, include_evaluation=True):
                 raise ValueError("Книга отличается от использованной при обучении")
             train_words, val_words = split_words(tokenize_words(raw_text))
             save_evaluation(model, tokenizer, train_words, val_words)
-        return
+        return artifacts
 
     print("Подготовка книги и BPE", flush=True)
     raw_text = load_corpus()
